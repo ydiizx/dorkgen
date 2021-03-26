@@ -1,11 +1,12 @@
 from random import choice
+import argparse
 
 
-def core():
+def core(filein, max_dork):
     data_dict = dict()
     data = [
         ("domain_ext", "preset3_domainextensions.txt"),
-        ("keywords", "keywords.txt"),
+        ("keywords", filein),
         ("pagetypes", "default_pagetypes.txt"),
         ("pageformats", "default_pageformats.txt"),
         ("searchfunctions", "default_searchfunctions.txt"),
@@ -27,7 +28,6 @@ def core():
             else:
                 temp += j
         dorktypes.append(temp)
-    max_dork = 20000
     res = set()
     while len(res) <= max_dork:
         # KW PF PT DE SF
@@ -45,19 +45,13 @@ def core():
         for i in res:
             f.write(i+"\n")
 
-        # for KW in data_dict['keywords']:
-        #     for DE in data_dict['domain_ext']:
-        #         for PT in data_dict["pagetypes"]:
-        #             for PF in data_dict['pageformats']:
-        #                 f.write(dorktypes[0].format(
-        #                     KW=KW, PF=PF, PT=PT, DE=DE)+"\n")
-        #                 for SF in data_dict['searchfunctions']:
-        #                     f.write(dorktypes[1].format(SF=SF, DE=DE, KW=KW))
-        #                     f.write(dorktypes[2].format(
-        #                         SF=SF, KW=KW, PF=PF, PT=PT, DE=DE))
-        #                     f.write(dorktypes[3].format(
-        #                         SF=SF, KW=KW, PF=PF, PT=PT, DE=DE))
-        #                     f.write(dorktypes[4].format(PT=PT, KW=KW, DE=DE))
 
+if __name__ == "__main__":
+    arg = argparse.ArgumentParser()
+    arg.add_argument("-i", "--filein", type=str, default="keywords.txt",
+                     required=True, help="Your List of Keywords")
+    arg.add_argument("-m", "--max_dork", type=int, default=20000,
+                     required=False, help="Max dork you want")
+    args = vars(arg.parse_args())
 
-core()
+    core(**args)
