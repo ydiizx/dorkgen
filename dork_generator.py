@@ -28,19 +28,22 @@ def core(filein, max_dork, output):
             else:
                 temp += j
         dorktypes.append(temp)
+        
     res = set()
+    if not max_dork: max_dork = len(data_dict('keywords'))*len(data_dict['domain_ext'])
     while len(res) <= max_dork:
         # KW PF PT DE SF
-        for DE in data_dict['domain_ext']:
-            KW = choice(data_dict['keywords'])
-            PF = choice(data_dict['pageformats'])
-            PT = choice(data_dict['pagetypes'])
-            SF = choice(data_dict['searchfunctions'])
-            res.add(dorktypes[0].format(KW=KW, PF=PF, PT=PT, DE=DE))
-            res.add(dorktypes[1].format(SF=SF, DE=DE, KW=KW))
-            res.add(dorktypes[2].format(SF=SF, KW=KW, PF=PF, PT=PT, DE=DE))
-            res.add(dorktypes[3].format(SF=SF, PT=PT, KW=KW, PF=PF, DE=DE))
-            res.add(dorktypes[4].format(PT=PT, KW=KW, DE=DE))
+        for KW in data_dict['keywords']:
+            for DE in data_dict['domain_ext']:
+                PF = choice(data_dict['pageformats'])
+                PT = choice(data_dict['pagetypes'])
+                SF = choice(data_dict['searchfunctions'])
+                res.add(dorktypes[0].format(KW=KW, PF=PF, PT=PT, DE=DE))
+                res.add(dorktypes[1].format(SF=SF, DE=DE, KW=KW))
+                res.add(dorktypes[2].format(SF=SF, KW=KW, PF=PF, PT=PT, DE=DE))
+                res.add(dorktypes[3].format(SF=SF, PT=PT, KW=KW, PF=PF, DE=DE))
+                res.add(dorktypes[4].format(PT=PT, KW=KW, DE=DE))
+
     with open(output, 'w') as f:
         for i in res:
             f.write(i+"\n")
