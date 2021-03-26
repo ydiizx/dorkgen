@@ -1,0 +1,12 @@
+.com
+.net
+.org
+.co
+.us
+.uk
+.co.us
+.co.uk
+.web
+.it
+.fr
+.de
