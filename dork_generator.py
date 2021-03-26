@@ -28,7 +28,7 @@ def core(filein, max_dork, output):
             else:
                 temp += j
         dorktypes.append(temp)
-        
+
     res = set()
     if not max_dork: max_dork = len(data_dict('keywords'))*len(data_dict['domain_ext'])
     while len(res) <= max_dork:
@@ -52,8 +52,8 @@ def core(filein, max_dork, output):
 if __name__ == "__main__":
     arg = argparse.ArgumentParser()
     arg.add_argument("-i", "--filein", type=str, default="keywords.txt",
-                     required=True, help="Your List of Keywords")
-    arg.add_argument("-m", "--max_dork", type=int, default=20000,
+                     required=False, help="Your List of Keywords")
+    arg.add_argument("-m", "--max_dork", type=int,default=None,
                      required=False, help="Max dork you want")
     arg.add_argument("-o", "--output", type=str,
                      default="result.txt", help="Your Result Output")
