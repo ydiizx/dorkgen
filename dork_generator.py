@@ -2,7 +2,7 @@ from random import choice
 import argparse
 
 
-def core(filein, max_dork):
+def core(filein, max_dork, output):
     data_dict = dict()
     data = [
         ("domain_ext", "preset3_domainextensions.txt"),
@@ -41,7 +41,7 @@ def core(filein, max_dork):
             res.add(dorktypes[2].format(SF=SF, KW=KW, PF=PF, PT=PT, DE=DE))
             res.add(dorktypes[3].format(SF=SF, PT=PT, KW=KW, PF=PF, DE=DE))
             res.add(dorktypes[4].format(PT=PT, KW=KW, DE=DE))
-    with open('result.txt', 'w') as f:
+    with open(output, 'w') as f:
         for i in res:
             f.write(i+"\n")
 
@@ -52,6 +52,8 @@ if __name__ == "__main__":
                      required=True, help="Your List of Keywords")
     arg.add_argument("-m", "--max_dork", type=int, default=20000,
                      required=False, help="Max dork you want")
+    arg.add_argument("-o", "--output", type=str,
+                     default="result.txt", help="Your Result Output")
     args = vars(arg.parse_args())
 
     core(**args)
