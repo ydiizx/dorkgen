@@ -1,7 +1,6 @@
 from random import choice
 import argparse
 
-
 def core(filein, max_dork, output):
     data_dict = dict()
     data = [
@@ -11,12 +10,16 @@ def core(filein, max_dork, output):
         ("pageformats", "default_pageformats.txt"),
         ("searchfunctions", "default_searchfunctions.txt"),
     ]
+ 
     for i in data:
         if i[0] == "keywords":
             data_dict[i[0]] = [x.split("\n")[0]
                                for x in open(i[1], 'r').readlines()]
+        elif i[0] == "domain_ext":
+            data_dict[i[0]] = [x.split("\n")[0] for x in open(i[1], 'r').readlines()]
         else:
             data_dict[i[0]] = open(i[1], 'r').readlines()[0].split()
+ 
     dorktypes = list()
     for i in [x.split("\n")[0] for x in open("dorktypes.txt", 'r').readlines()]:
         temp = ""
@@ -30,7 +33,7 @@ def core(filein, max_dork, output):
         dorktypes.append(temp)
 
     res = set()
-    if not max_dork: max_dork = len(data_dict('keywords'))*len(data_dict['domain_ext'])
+    if not max_dork: max_dork = len(data_dict['keywords'])*len(data_dict['domain_ext'])
     while len(res) <= max_dork:
         # KW PF PT DE SF
         for KW in data_dict['keywords']:
@@ -47,7 +50,6 @@ def core(filein, max_dork, output):
     with open(output, 'w') as f:
         for i in res:
             f.write(i+"\n")
-
 
 if __name__ == "__main__":
     arg = argparse.ArgumentParser()
