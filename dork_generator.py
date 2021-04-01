@@ -6,22 +6,36 @@ import concurrent.futures
 count = 0
 
 def worker(dork_type):
-    global count
-    print("WORKER")
-    for KW in data_dict['keywords']:
-        for DE in data_dict['domain_ext']:
-            for PT in data_dict['pagetypes']:
-                for PF in data_dict['pageformats']:
-                    for SF in data_dict['searchfunctions']:
-                        temp_dict = dict(
-                                KW=KW, 
-                                DE=DE,
-                                PT=PT,
-                                PF=PF,
-                                SF=SF, 
-                                NB=choice(numbers))
-                        out.write(dork_type.format(**temp_dict))
-                        count += 1
+    global count 
+    parsing = list()
+    # PARSING DORK_TYPE
+    for i in range(0, len(dork_type)+1, 1):
+        temp = dork_type[i-2:i]
+        if temp:
+            if temp[0].isupper() and temp[1].isupper():
+                dork_type
+                parsing.append(temp)
+
+    dork_type = "".join(x for x in dork_type if not x.isupper())
+
+    for u in data_dict[parsing[0]]:
+        for n in data_dict[parsing[1]]:
+            for c in data_dict[parsing[2]]:
+
+                if len(parsing) >3:
+                    for x in data_dict[parsing[3]]:
+
+                        if len(parsing) > 4:
+                            for w in data_dict[parsing[4]]:
+                                out.write(dork_type.format(u,n,c,x,w)+"\n")
+                                count += 1
+                        else:
+                            out.write(dork_type.format(u,n,c,x)+"\n")
+                            count += 1
+                else:
+                    out.write(dork_type.format(u, n, c)+"\n")
+                    count += 1
+
     return "SUCCESS" 
 def core(filein, max_dork, output):
     global data_dict
@@ -31,18 +45,18 @@ def core(filein, max_dork, output):
     out = open(output, 'w')
     data_dict = dict()
     data = [
-        ("domain_ext", "preset3_domainextensions.txt"),
-        ("keywords", filein),
-        ("pagetypes", "default_pagetypes.txt"),
-        ("pageformats", "default_pageformats.txt"),
-        ("searchfunctions", "default_searchfunctions.txt"),
+        ("DE", "preset3_domainextensions.txt"),
+        ("KW", filein),
+        ("PT", "default_pagetypes.txt"),
+        ("PF", "default_pageformats.txt"),
+        ("SF", "default_searchfunctions.txt"),
     ]
  
     for i in data:
-        if i[0] == "keywords":
+        if i[0] == "KW":
             data_dict[i[0]] = [x.split("\n")[0]
                                for x in open(i[1], 'r').readlines()]
-        elif i[0] == "domain_ext":
+        elif i[0] == "DE":
             data_dict[i[0]] = [x.split("\n")[0] for x in open(i[1], 'r').readlines()]
         else:
             data_dict[i[0]] = open(i[1], 'r').readlines()[0].split()
@@ -56,9 +70,6 @@ def core(filein, max_dork, output):
 
     res = list(completed)
     print(count)
-    #if not max_dork: max_dork = len(data_dict['keywords'])*len(data_dict['domain_ext'])\
-     #       * (len(data_dict['pagetypes']) * len(data_dict['pageformats']) * len(data_dict['searchfunctions']) + len(numbers))
-    #print(max_dork)
 
 if __name__ == "__main__":
     arg = argparse.ArgumentParser()

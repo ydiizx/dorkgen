@@ -1,6 +1,9 @@
-{KW}.{PF}?{PT}= site:{DE}
+{KW}{PF}?{PT}= site:{DE}
 {SF} "{DE}" + "{KW}"
-{SF}{KW}.{PF}?{PT}= site:{DE}
-{SF}{PT}={KW}.{PF}? site:{DE}
+{SF}{KW}{PF}?{PT}= site:{DE}
+{SF}{PT}={KW}{PF}? site:{DE}
 {PT}= "{KW}" + "{DE}"
-{SF}:{PF}={PT}={NB}
+{SF}:{PF}={PT}
+{SF}{KW}{PF}?{PT}= site:{DE}
+{SF}{PT}={KW}{PF}? site:{DE}
+{PF}?{PT}= "{KW}"
