@@ -1,5 +1,6 @@
-(KW).(PF)?(PT)= site:(DE)
-(SF) ".(DE)" + "(KW)"
-(SF)(KW).(PF)?(PT)= site:(DE)
-(SF)(PT)=(KW).(PF)? site:(DE)
-(PT)= "(KW)" + ".(DE)"
+{KW}.{PF}?{PT}= site:{DE}
+{SF} "{DE}" + "{KW}"
+{SF}{KW}.{PF}?{PT}= site:{DE}
+{SF}{PT}={KW}.{PF}? site:{DE}
+{PT}= "{KW}" + "{DE}"
+{SF}:{PF}={PT}={NB}

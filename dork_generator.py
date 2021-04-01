@@ -1,7 +1,34 @@
 from random import choice
 import argparse
+import time 
+import concurrent.futures 
 
+count = 0
+
+def worker(dork_type):
+    global count
+    print("WORKER")
+    for KW in data_dict['keywords']:
+        for DE in data_dict['domain_ext']:
+            for PT in data_dict['pagetypes']:
+                for PF in data_dict['pageformats']:
+                    for SF in data_dict['searchfunctions']:
+                        temp_dict = dict(
+                                KW=KW, 
+                                DE=DE,
+                                PT=PT,
+                                PF=PF,
+                                SF=SF, 
+                                NB=choice(numbers))
+                        out.write(dork_type.format(**temp_dict))
+                        count += 1
+    return "SUCCESS" 
 def core(filein, max_dork, output):
+    global data_dict
+    global out 
+    global numbers
+
+    out = open(output, 'w')
     data_dict = dict()
     data = [
         ("domain_ext", "preset3_domainextensions.txt"),
@@ -21,6 +48,7 @@ def core(filein, max_dork, output):
             data_dict[i[0]] = open(i[1], 'r').readlines()[0].split()
  
     dorktypes = list()
+ 
     for i in [x.split("\n")[0] for x in open("dorktypes.txt", 'r').readlines()]:
         temp = ""
         for j in i:
@@ -31,25 +59,17 @@ def core(filein, max_dork, output):
             else:
                 temp += j
         dorktypes.append(temp)
+    
+    numbers =  list(range(1,30,3))
 
-    res = set()
-    if not max_dork: max_dork = len(data_dict['keywords'])*len(data_dict['domain_ext'])
-    while len(res) <= max_dork:
-        # KW PF PT DE SF
-        for KW in data_dict['keywords']:
-            for DE in data_dict['domain_ext']:
-                PF = choice(data_dict['pageformats'])
-                PT = choice(data_dict['pagetypes'])
-                SF = choice(data_dict['searchfunctions'])
-                res.add(dorktypes[0].format(KW=KW, PF=PF, PT=PT, DE=DE))
-                res.add(dorktypes[1].format(SF=SF, DE=DE, KW=KW))
-                res.add(dorktypes[2].format(SF=SF, KW=KW, PF=PF, PT=PT, DE=DE))
-                res.add(dorktypes[3].format(SF=SF, PT=PT, KW=KW, PF=PF, DE=DE))
-                res.add(dorktypes[4].format(PT=PT, KW=KW, DE=DE))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(dorktypes)+1) as executor:
+        completed = executor.map(worker, dorktypes)
 
-    with open(output, 'w') as f:
-        for i in res:
-            f.write(i+"\n")
+    res = list(completed)
+    print(count)
+    #if not max_dork: max_dork = len(data_dict['keywords'])*len(data_dict['domain_ext'])\
+     #       * (len(data_dict['pagetypes']) * len(data_dict['pageformats']) * len(data_dict['searchfunctions']) + len(numbers))
+    #print(max_dork)
 
 if __name__ == "__main__":
     arg = argparse.ArgumentParser()
@@ -60,5 +80,7 @@ if __name__ == "__main__":
     arg.add_argument("-o", "--output", type=str,
                      default="result.txt", help="Your Result Output")
     args = vars(arg.parse_args())
-
+    start = time.time()
     core(**args)
+    end = time.time()
+    print(end - start)
