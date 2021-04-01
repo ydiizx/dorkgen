@@ -47,19 +47,8 @@ def core(filein, max_dork, output):
         else:
             data_dict[i[0]] = open(i[1], 'r').readlines()[0].split()
  
-    dorktypes = list()
+    dorktypes = [x.strip() for x in open('dorktypes.txt','r').readlines()]
  
-    for i in [x.split("\n")[0] for x in open("dorktypes.txt", 'r').readlines()]:
-        temp = ""
-        for j in i:
-            if j == "(":
-                temp += "{"
-            elif j == ")":
-                temp += "}"
-            else:
-                temp += j
-        dorktypes.append(temp)
-    
     numbers =  list(range(1,30,3))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=len(dorktypes)+1) as executor:
